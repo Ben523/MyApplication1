@@ -33,18 +33,18 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 EditText userID = getView().findViewById(R.id.register_user_id);
-                EditText ageText = getView().findViewById(R.id.register_re_password);
+                EditText passReText = getView().findViewById(R.id.register_re_password);
                 EditText passText = getView().findViewById(R.id.register_password);
                 String username = userID.getText().toString();
-                String age = ageText.getText().toString();
+                String pass_re = passReText.getText().toString();
                 String password = passText.getText().toString();
 
-                if (username.isEmpty() || password.isEmpty()) {
-                    Log.d("USER", "FIELD NAME IS EMPTY");
-                    Toast.makeText(getActivity(), "FIELD NAME IS EMPTY", Toast.LENGTH_SHORT).show();
-                } else if (username.equals("admin")) {
-                    Log.d("USER", "USER ALREADY EXIST");
-                    Toast.makeText(getActivity(), "USER ALREADY EXIST", Toast.LENGTH_SHORT).show();
+                if (username.isEmpty() || password.isEmpty() || pass_re.isEmpty()) {
+                    Log.d("USER", "SOME FIELD  IS EMPTY");
+                    Toast.makeText(getActivity(), "SOME FIELD  IS EMPTY", Toast.LENGTH_SHORT).show();
+                } else if (!password.equals(pass_re)) {
+                    Log.d("USER", "Password is not matched");
+                    Toast.makeText(getActivity(), "Password is not matched", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d("USER", "GO TO BMI");
                     if (validate(username, password)) {
@@ -95,28 +95,34 @@ public class RegisterFragment extends Fragment {
 //        }
 
         //Handling validation for Email field
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            valid = false;
+        if (!isEmailValid(username)) {
+
             Toast.makeText(getActivity(), "Please enter valid email", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
-            valid = true;
+            valid =  true;
         }
 
         //Handling validation for Password field
         if (password.isEmpty()) {
-            valid = false;
+
             Toast.makeText(getActivity(), "Please enter valid password", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             if (password.length() > 5) {
                 valid = true;
 
             } else {
-                valid = false;
+
                 Toast.makeText(getActivity(), "password is too short", Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
 
 
         return valid;
+    }
+    private boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
