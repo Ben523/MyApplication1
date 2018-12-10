@@ -1,5 +1,7 @@
 package com.example.a123.myapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -56,6 +58,12 @@ public class LoginFragment extends Fragment {
                     User currentUser = db.Authenticate(new User(0, null, username, password));
                     if (currentUser != null) {
                         Toast.makeText(getActivity(), "Successfully Logged in!", Toast.LENGTH_SHORT).show();
+                        int x = 100;
+
+                        SharedPreferences sp = getContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("My_Value", username);
+                        editor.commit();
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.main_view,new Menufragment())
